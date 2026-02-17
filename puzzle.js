@@ -27,7 +27,7 @@ function createPuzzle(){
     let x = (num % size) * -80;
     let y = Math.floor(num / size) * -80;
 
-    piece.style.backgroundImage = "url('foto.jpeg')";
+    piece.style.backgroundImage = "url('puzzle.jpeg')";
     piece.style.backgroundPosition = `${x}px ${y}px`;
 
     piece.onclick = function(){
@@ -77,3 +77,4 @@ function checkWin(){
 
 
 createPuzzle();
+
