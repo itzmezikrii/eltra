@@ -489,7 +489,7 @@ shadow-md transition">
         <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTVsOGxpdDU0OGg2MDcyMjcxbXJzc3pwam04aG1vbHRwcXBqZ3ZrcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7y4Nc95399hsr24oYc/giphy.gif"
             class="block mx-auto w-20 md:w-56 mb-6 rounded-2xl shadow-lg">
         <h2 class="text-3xl md:text-5xl text-rose-500 font-bold">I Love You Always</h2>
-        <p class="mt-6 text-gray-600">23 July 2025 and counting.</p>
+        <p class="mt-6 text-gray-600">16 September 2025 and counting.</p>
         <p id="loveTime" class="mt-1 text-rose-400 font-semibold"></p>
         <button onclick="openLetter()"
             class="mt-6 bg-rose-400 text-white px-6 py-3 rounded-2xl hover:scale-110 transition">
@@ -574,7 +574,7 @@ shadow-md transition">
         }
 
         function updateLoveTime() {
-            const startDate = new Date("2025-07-23T00:00:00");
+            const startDate = new Date("2025-09-16T00:00:00");
             const now = new Date();
             const diff = now - startDate;
 
@@ -748,7 +748,7 @@ shadow-md transition">
                     clearInterval(countdown);
                     clearInterval(spawnInterval);
                     gameStarted = false;
-                    if (score >= 23) {
+                    if (score >= 25) {
                         document.getElementById("gameScore").innerText = "Bebyh Hebat 💖";
                         confettiExplosion();
                         setTimeout(() => go('s4'), 1500);
@@ -781,12 +781,12 @@ shadow-md transition">
                 .replace(/\s/g, '');
 
             let validPasswords = [
-                "17sept2025",
-                "17september2025",
-                "1792025",
-                "17092025",
-                "17-09-2025",
-                "17/09/2025"
+                "16sept2025",
+                "16september2025",
+                "1692025",
+                "16092025",
+                "16-09-2025",
+                "16/09/2025"
             ];
 
             if (validPasswords.includes(val)) {
