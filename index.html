@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You 💖</title>
+    <meta name="description" content="Ada sesuatu buat Bebyh di sini…">
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(to bottom, #ffe4ec, #fff);
+        }
+
+        #puzzleBoard {
+            width: 320px;
+            height: 320px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .piece {
+            width: 80px;
+            height: 80px;
+            background-size: 320px 320px;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.2), transparent 70%);
+            top: -200px;
+            right: -200px;
+            z-index: -1;
+        }
+
+        #clawMachine {
+            position: relative;
+            width: 90vw;
+            max-width: 400px;
+            aspect-ratio: 3 / 3.5;
+            margin: auto;
+            border: 4px solid pink;
+            background: #fff0f5;
+            overflow: hidden;
+        }
+
+        #clawSystem {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+        }
+
+        #cable {
+            width: 4px;
+            height: 40px;
+            background: #444;
+            margin: 0 auto;
+            transition: height 0.6s ease;
+        }
+
+
+        #claw {
+            display: block;
+            margin: 0 auto;
+        }
+
+        #prize {
+            position: absolute;
+            bottom: 40px;
+            left: 150px;
+            font-size: 50px;
+            transition: bottom 0.4s ease;
+        }
+
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transform: rotate(calc(-5deg + 10deg * var(--rand)));
+            transition: .4s;
+            position: relative;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+
+        @keyframes cuteBounce {
+            0% {
+                transform: scale(0.8) translateY(20px);
+                opacity: 0;
+            }
+
+            30% {
+                transform: scale(1.05) translateY(-10px);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(0.95) translateY(5px);
+            }
+
+            70% {
+                transform: scale(1.02) translateY(-5px);
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .love-pop {
+            animation: cuteBounce 0.8s ease forwards;
+        }
+
+        .polaroid::after {
+            content: "Our Moment 💕";
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            font-family: 'Pacifico', cursive;
+            font-size: 14px;
+            color: #ff4d8d;
+        }
+
+        .card {
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transition: .4s;
+            transform: scale(1);
+        }
+
+        .card:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        .section {
+            display: none;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .section.active {
+            display: flex;
+            animation: fade .8s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-love {
+            background: linear-gradient(45deg, #ff6fa5, #ff99c8);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 999px;
+            font-weight: 600;
+            transition: .3s;
+        }
+
+        .btn-love:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(255, 0, 100, .3);
+        }
+
+        input {
+            padding: 12px;
+            border-radius: 999px;
+            outline: none;
+            text-align: center;
+            background: linear-gradient(45deg, #fff0f5, #ffe4f0);
+            border: 2px solid #ff8fab;
+            transition: .3s;
+        }
+
+        input:focus {
+            border-color: #ff4d8d;
+            box-shadow: 0 0 15px rgba(255, 0, 100, .3);
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            animation: floatUp 3s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.5);
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(1.5);
+            }
+        }
+
+        #progressBar {
+            transition: width 0.6s ease;
+            opacity: 50%;
+        }
+
+        .silent-container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .silent-text {
+            color: #e11d48;
+            font-size: 28px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 2s ease;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-style: italic;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="progressBar" class="fixed top-0 left-0 h-1 bg-rose-400 z-50" style="width:1%"></div>
+
+    <div id="particles-js" class="fixed w-full h-full -z-10"></div>
+
+    <section id="s1" class="section active flex-col justify-center items-center text-center p-6">
+        <h1 class="text-3xl md:text-6xl text-rose-500 font-bold mb-6" style="font-family: 'Playfair Display', serif; font-weight: 600;">Happy Monthversary 💖</h1>
+        <img src="foto.jpeg" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-3xl shadow-xl mb-6">
+        <p id="typed1" class="text-lg text-gray-700 max-w-xl"></p>
+
+        <button onclick="go('s2')" class="mt-8 bg-rose-500 text-white px-6 py-3 rounded-2xl hover:scale-110 transition">
+            Next 💌
+        </button>
+    </section>
+
+    <section id="s2" class="section">
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjNiczUzdnZjbGtncW82MnZiamxiMzBtbmc1YzlkaTloMXNkMDRvMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rT7WPCciy8oETxLmUV/giphy.gif"
+            class="w-20 md:w-56 mb-6 rounded-2xl shadow-lg">
+
+        <h2 id="typed2" class="text-3xl font-bold text-pink-600 mb-6"></h2>
+
+        <div class="flex gap-6">
+            <button id="yesBtn" class="btn-love">Sayang</button>
+            <button id="noBtn" class="btn-love bg-gray-300 text-black">Gx</button>
+        </div>
+    </section>
+
+    <section id="s3" class="section relative">
+        <h2 id="typed3" class="text-2xl font-bold text-pink-600 mb-4"></h2>
+
+        <div id="gameScore" class="mb-4 font-semibold text-pink-500"></div>
+        <div id="gameArea" class="relative w-full h-96 bg-pink-100 rounded-xl overflow-hidden"></div>
+    </section>
+
+    <section id="s4" class="section relative text-center p-6">
+        <h2 class="text-2xl font-bold mb-4">Susun Foto Kita 🧩</h2>
+
+
+        <div id="puzzleBoard" class="mx-auto"></div>
+
+        <p id="puzzleStatus" class="mt-4 text-pink-600 font-semibold"></p>
+    </section>
+
+    <section id="s5" class="section relative text-center p-6">
+        <h2 class="text-2xl font-bold mb-4">Mesin Capit Cinta 🕹️</h2>
+
+        <div id="clawMachine">
+
+            <div id="clawSystem">
+                <div id="cable"></div>
+
+                <svg id="claw" width="80" height="100" viewBox="0 0 80 100">
+                    <circle cx="40" cy="25" r="8" fill="#555" />
+                    <g id="arms">
+                        <line x1="40" y1="30" x2="15" y2="80" stroke="#444" stroke-width="4" />
+                        <line x1="40" y1="30" x2="65" y2="80" stroke="#444" stroke-width="4" />
+                        <line x1="40" y1="30" x2="40" y2="90" stroke="#444" stroke-width="4" />
+                    </g>
+                </svg>
+            </div>
+
+            <div id="prize">💖</div>
+
+        </div>
+
+        <button onclick="dropClaw()" class="mt-4 px-4 py-2 bg-pink-500 text-white rounded">
+            TURUN
+        </button>
+
+        <p id="clawResult" class="mt-3 font-semibold text-pink-600"></p>
+    </section>
+
+    <section id="s6" class="section">
+        <h2 class="text-2xl font-bold text-pink-600 mb-6">
+            Masukin Passwordnyaa 💗
+        </h2>
+
+        <p id="typed4" class="text-gray-600 max-w-md mb-6"></p>
+
+
+        <input id="passInput" type="text" placeholder="Passwordnyaa" class="px-4 py-3 rounded-xl text-center mb-2
+bg-gradient-to-r from-pink-200 to-rose-200
+focus:outline-none focus:ring-4 focus:ring-pink-300
+shadow-md transition">
+
+        <br>
+
+        <button class="btn-love" onclick="checkPass()">Masuk 💖</button>
+
+        <p id="passMsg" class="mt-4 text-pink-600"></p>
+    </section>
+
+    <section id="s7" class="section flex-col justify-center items-center p-8 text-center">
+        <h2 class="text-4xl text-rose-500 font-bold mb-10">Memories 📸</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl">
+
+            <div class="polaroid" style="--rand:0.1"><img src="moment (1).jpeg"
+                    class="w-full h-48 object-cover rounded-md"></div>
+            <div class="polaroid" style="--rand:0.8"><img src="moment (2).jpeg"
+                    class="w-full h-48 object-cover rounded-md"></div>
+            <div class="polaroid" style="--rand:0.3"><img src="moment (4).jpeg"
+                    class="w-full h-48 object-cover rounded-md"></div>
+            <div class="polaroid" style="--rand:0.6"><img src="moment (3).jpeg"
+                    class="w-full h-48 object-cover rounded-md"></div>
+            <div class="polaroid" style="--rand:0.2"><img src="moment (6).jpeg"
+                    class="w-full h-48 object-cover rounded-md"></div>
+            <div class="polaroid" style="--rand:0.9"><img src="moment (11).jpeg"
+                    class="w-full h-48 object-cover rounded-md"></div>
+
+        </div>
+
+        <button onclick="go('s8')"
+            class="mt-12 bg-rose-500 text-white px-6 py-3 rounded-2xl hover:scale-110 transition">
+            Next 💌
+        </button>
+    </section>
+    <section id="s8" class="section flex-col justify-center items-center p-8 text-center">
+        <h2 class="text-4xl text-rose-500 font-bold mb-10">Love Notes 💌</h2>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl">
+
+            <div class="card bg-pink-400">
+                Terima kasih sudah hadir di hidup Jerii
+                yang tadinya biasa ajaa,
+                sekarang jadii lebih berwarnaa 🌈💗
+            </div>
+
+            <div class="card bg-rose-400">
+                Terima kasih selalu sabarr
+                ngadepin sifat Jerii
+                yaaa 😅🤍
+            </div>
+
+            <div class="card bg-fuchsia-400">
+                Terima kasih sudah ngajarin Jerii
+                banyak hal tentang dewasa,
+                tentang tenang, dan tentang setia 🌷✨
+            </div>
+
+            <div class="card bg-purple-400">
+                Terima kasih sudah jadi tempat
+                Jerii cerita, pulang, dan merasa aman 🏡💞
+            </div>
+
+            <div class="card bg-red-400">
+                Bebyh itu kayak anak singaa,
+                lucu bangettt tapi garangggg 🦁❤️
+            </div>
+
+            <div class="card bg-orange-400">
+                Kalau nanti dunia lagi berisikk,
+                kita bikin dunia kecil kita sendiri ajaaa yaaaa 🌍💫
+            </div>
+
+        </div>
+
+        <button onclick="go('s9')"
+            class="mt-12 bg-rose-500 text-white px-6 py-3 rounded-2xl hover:scale-110 transition">
+            Next 📷
+        </button>
+    </section>
+
+    <section id="s9" class="section flex-col justify-center items-center p-10">
+        <h2 class="text-4xl text-rose-500 font-bold mb-10 text-center">My Favorite 📸</h2>
+        <div class="columns-2 md:columns-4 gap-4 max-w-6xl space-y-4">
+
+            <!-- 1:1 dominan -->
+            <img src="foto (1).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (2).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (3).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (4).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (5).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (6).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (7).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (8).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+
+
+            <!-- 9:16 -->
+
+            <!-- 1:1 -->
+            <img src="foto (9).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+
+            <img src="foto (10).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+
+            <!-- Tambahan -->
+            <img src="foto (11).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (12).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (13).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (14).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (15).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+            <img src="foto (16).jpeg" class="w-full rounded-xl mb-4 break-inside-avoid object-cover">
+
+        </div>
+
+        <button onclick="go('s10')" class="mt-10 bg-rose-500 text-white px-6 py-3 rounded-2xl">Next 💞</button>
+    </section>
+    <section id="s10" class="section">
+        <div class="silent-container">
+            <div id="silentText" class="silent-text"></div>
+
+            <button id="silentBtn" onclick="go('s11')"
+                class="mt-10 bg-rose-500 text-white px-6 py-3 rounded-2xl opacity-0 transition duration-500">
+                Next 🤍
+            </button>
+        </div>
+    </section>
+
+
+    <!-- SECTION 7 FINAL -->
+    <section id="s11" class="section flex-col justify-center items-center text-center">
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTVsOGxpdDU0OGg2MDcyMjcxbXJzc3pwam04aG1vbHRwcXBqZ3ZrcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7y4Nc95399hsr24oYc/giphy.gif"
+            class="block mx-auto w-20 md:w-56 mb-6 rounded-2xl shadow-lg">
+        <h2 class="text-3xl md:text-5xl text-rose-500 font-bold">I Love You Always</h2>
+        <p class="mt-6 text-gray-600">23 July 2025 and counting.</p>
+        <p id="loveTime" class="mt-1 text-rose-400 font-semibold"></p>
+        <button onclick="openLetter()"
+            class="mt-6 bg-rose-400 text-white px-6 py-3 rounded-2xl hover:scale-110 transition">
+            Open Secret Letter 💌
+        </button>
+
+        <div id="secretLetter" class="mt-6 hidden max-w-xl text-gray-700 bg-white p-6 rounded-2xl shadow-xl love-pop">
+            Jerii bersyukur banget bisa kenal Bebyh.
+            Semoga kita terus tumbuh bareng yaa 🤍
+        </div>
+
+
+    </section>
+
+
+    <audio id="bgMusic1" loop>
+        <source src="music.mpeg" type="audio/mpeg">
+    </audio>
+    <audio id="bgMusic2" loop>
+        <source src="music2.mpeg" type="audio/mpeg">
+    </audio>
+
+
+    <!-- MODAL SAYANG -->
+    <div id="loveModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center max-w-sm shadow-2xl love-pop">
+            <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHQ0NnZib3pnZTFzZzhhd2dxaTl4Z2NzN3ZqYnh4eHdzNGtiZGhoNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/nNfRs2Unc5VxI3VnQB/giphy.gif"
+                class="block mx-auto w-20 md:w-56 mb-6 rounded-2xl shadow-lg">
+            <h3 class="text-2xl font-bold text-rose-500 mb-4">
+                Aww makacii cayangg
+            </h3>
+            <p class="text-gray-600 mb-6">
+                Jerii juga sayang Bebyh banyakkk banyakkk🤍
+            </p>
+            <button onclick="closeModal()"
+                class="bg-rose-500 text-white px-6 py-3 rounded-2xl hover:scale-110 transition">
+                Next 💌
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="puzzle.js"></script>
+    <script src="claw.js"></script>
+    <script>
+
+        function confettiExplosion() {
+            const duration = 1500;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 90,
+                    spread: 55,
+                    origin: { x: Math.random(), y: 1 },
+                    colors: ['#ff4d8d', '#ff99c8', '#ffc2d1', '#ff6fa5']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+
+        setInterval(() => {
+            let heart = document.createElement("div");
+            heart.innerHTML = "💗";
+            heart.style.position = "fixed";
+            heart.style.left = Math.random() * 100 + "%";
+            heart.style.bottom = "0";
+            heart.style.fontSize = "20px";
+            heart.style.animation = "floatUp 4s linear forwards";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }, 3000);
+
+
+        function openLetter() {
+            document.getElementById("secretLetter").classList.remove("hidden");
+        }
+
+        function updateLoveTime() {
+            const startDate = new Date("2025-07-23T00:00:00");
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+            document.getElementById("loveTime").innerText =
+                days + " days " + hours + " hours together 💖";
+        }
+
+        setInterval(updateLoveTime, 1000);
+        updateLoveTime();
+
+        let typedDone = {
+            s1: false,
+            s2: false,
+            s3: false,
+            s6: false
+        };
+
+        function runTyped(id) {
+
+            if (id === 's1' && !typedDone.s1) {
+                new Typed("#typed1", {
+                    strings: ["Jerii cuma mau bilang... Bebyh itu manusia favoritkuu 💖"],
+                    typeSpeed: 50,
+                    showCursor: false
+                });
+                typedDone.s1 = true;
+            }
+
+            if (id === 's2' && !typedDone.s2) {
+                new Typed("#typed2", {
+                    strings: ["Bebyh Sayang Jerii Gaa? "],
+                    typeSpeed: 60,
+                    showCursor: false
+                });
+                typedDone.s2 = true;
+            }
+
+            if (id === 's3' && !typedDone.s3) {
+                new Typed("#typed3", {
+                    strings: ["Tangkap Hati Jerii Hihi 💘"],
+                    typeSpeed: 60,
+                    showCursor: false
+                });
+                typedDone.s3 = true;
+            }
+
+            if (id === 's6' && !typedDone.s6) {
+                new Typed("#typed4", {
+                    strings: ["Chat Jerii yaa.. nanti Jerii kasih tauu"],
+                    typeSpeed: 60,
+                    showCursor: false
+                });
+                typedDone.s6 = true;
+            }
+
+        }
+
+        function go(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+
+            runTyped(id);
+
+            const sections = ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11"];
+            let index = sections.indexOf(id);
+            let percent = ((index + 1) / sections.length) * 100;
+            document.getElementById("progressBar").style.width = percent + "%";
+
+
+            if (id === 's3') { startGame(); }
+            if (id === 's9') {
+
+                setTimeout(() => {
+
+                    let start = 0;
+                    let end = document.body.scrollHeight - window.innerHeight;
+                    let duration = 15000; // 15 DETIK cinematic
+                    let startTime = null;
+
+                    function smoothScroll(timestamp) {
+                        if (!startTime) startTime = timestamp;
+                        let progress = timestamp - startTime;
+
+                        let percent = Math.min(progress / duration, 1);
+
+                        // easing biar makin smooth
+                        let ease = percent < 0.5
+                            ? 2 * percent * percent
+                            : 1 - Math.pow(-2 * percent + 2, 2) / 2;
+
+                        window.scrollTo(0, ease * end);
+
+                        if (percent < 1) {
+                            requestAnimationFrame(smoothScroll);
+                        }
+                    }
+
+                    requestAnimationFrame(smoothScroll);
+
+                }, 500); // delay dikit biar masuk section dulu
+            } if (id === "s10") {
+
+                const text = document.getElementById("silentText");
+                const btn = document.getElementById("silentBtn");
+
+                text.style.opacity = "0";
+                btn.style.opacity = "0";
+                text.innerHTML = "";
+
+                // fade out music pertama
+                fadeOut(music1);
+
+                // tampilkan teks
+                setTimeout(() => {
+                    text.innerHTML = "makasih ya...<br>udah tetap di sini.";
+                    text.style.opacity = "1";
+                }, 600);
+
+                // setelah 3 detik hening
+                setTimeout(() => {
+                    btn.style.opacity = "1";
+
+                    // music2 mulai fade in bersamaan tombol muncul
+                    fadeIn(music2, 0.5);
+
+                }, 3600);
+            }
+        }
+
+        let noScale = 1;
+        document.getElementById("yesBtn").onclick = function () {
+            document.getElementById("loveModal").classList.remove("hidden");
+            document.getElementById("loveModal").classList.add("flex");
+        };
+
+        function closeModal() {
+            document.getElementById("loveModal").classList.remove("flex");
+            document.getElementById("loveModal").classList.add("hidden");
+            go('s3');
+        }
+
+
+        document.getElementById("noBtn").onclick = function () {
+            noScale -= .1;
+            this.style.transform = "scale(" + noScale + ")";
+            document.getElementById("yesBtn").style.transform =
+                "scale(" + (1 + (1 - noScale)) + ")";
+        };
+
+        let score = 0;
+        let timer = 10;
+        let spawnInterval;
+        let gameStarted = false;
+
+        function startGame() {
+            if (gameStarted) return;
+            gameStarted = true;
+            score = 0;
+            timer = 30;
+            document.getElementById("gameScore").innerText = "Score: 0 | Waktu: 30";
+            spawnInterval = setInterval(spawnLove, 800);
+            let countdown = setInterval(() => {
+                timer--;
+                document.getElementById("gameScore").innerText =
+                    "Score: " + score + " | Waktu: " + timer;
+                if (timer <= 0) {
+                    clearInterval(countdown);
+                    clearInterval(spawnInterval);
+                    gameStarted = false;
+                    if (score >= 23) {
+                        document.getElementById("gameScore").innerText = "Bebyh Hebat 💖";
+                        confettiExplosion();
+                        setTimeout(() => go('s4'), 1500);
+                    } else {
+                        document.getElementById("gameScore").innerText = "Kurang lagi 😝";
+                        setTimeout(() => startGame(), 1500);
+                    }
+                }
+            }, 1000);
+        }
+
+        function spawnLove() {
+            let love = document.createElement("div");
+            love.innerHTML = "💖";
+            love.className = "heart";
+            love.style.left = Math.random() * 90 + "%";
+            love.style.top = "80%";
+            document.getElementById("gameArea").appendChild(love);
+
+            love.onclick = function () {
+                score++;
+                love.remove();
+            };
+
+            setTimeout(() => love.remove(), 3000);
+        }
+        function checkPass() {
+            let val = document.getElementById("passInput").value
+                .toLowerCase()
+                .replace(/\s/g, '');
+
+            let validPasswords = [
+                "17sept2025",
+                "17september2025",
+                "1792025",
+                "17092025",
+                "17-09-2025",
+                "17/09/2025"
+            ];
+
+            if (validPasswords.includes(val)) {
+                go('s7');
+            } else {
+                document.getElementById("passMsg").innerText =
+                    "Hmmm... salah nih 😝 coba inget lagi atau chat Jerii 😉";
+            }
+        }
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 50, density: { enable: true, value_area: 800 } },
+                color: { value: "#ff4d8d" },
+                shape: {
+                    type: "image",
+                    image: {
+                        src: "heart.png",
+                        width: 25,
+                        height: 20
+                    }
+                }
+                ,
+                opacity: {
+                    value: 0.8,
+                    random: true
+                },
+                size: {
+                    value: 16,
+                    random: true
+                },
+                line_linked: {
+                    enable: false
+                },
+
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "top",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: false },
+                    onclick: { enable: false },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        function fadeOut(audio, callback) {
+            let fade = setInterval(() => {
+                if (audio.volume > 0.05) {
+                    audio.volume -= 0.05;
+                } else {
+                    audio.volume = 0;
+                    audio.pause();
+                    clearInterval(fade);
+                    if (callback) callback();
+                }
+            }, 100);
+        }
+
+        function fadeIn(audio, targetVolume = 0.5) {
+            audio.volume = 0;
+            audio.play();
+            let fade = setInterval(() => {
+                if (audio.volume < targetVolume - 0.05) {
+                    audio.volume += 0.05;
+                } else {
+                    audio.volume = targetVolume;
+                    clearInterval(fade);
+                }
+            }, 100);
+        }
+
+        const music1 = document.getElementById("bgMusic1");
+        const music2 = document.getElementById("bgMusic2");
+
+        let isPlaying = false;
+        document.body.addEventListener("click", function () {
+            if (!isPlaying) {
+                music1.volume = 0.5;
+                music1.play();
+                isPlaying = true;
+            }
+        }, { once: true });
+
+
+        window.onload = function () {
+            runTyped('s1');
+        };
+
+    </script>
+
+
+
+</body>
+
+</html>
